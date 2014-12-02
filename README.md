@@ -1,5 +1,5 @@
-##Welcome to Wakanda##
+##Welcome to wakProj1##
 
-This is the place to describe your Wakanda application.
+This is the place to describe wakProj1 application.
 
-Please visit [www.wakanda.org](http://www.wakanda.org "wakanda.org") for more information.
+wakProj1 informations.
