@@ -12,12 +12,28 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 	downloadAllBtn.click = function downloadAllBtn_click (event)// @startlock
 	{// @endlock
 		
+		
+		
+		
 		for(var i=0; i < sources.fichiersDistants.length; i++){
-			console.log(i);
 			sources.fichiersDistants.distant = "false";
    			sources.fichiersDistants.save();
-			resolveDisLocFilesFunc(event);
+   			
+   			 sources.fichiersDistants.getValues({
+   			 	onSuccess : function(event){
+   			 		console.log("GetValz");
+   			 		
+   			 	}
+   			 });
+   			 
+   			if(sources.fichiersDistants.selectNext()){
+   				//console.log("selectNext");
+   			} else {
+   				//console.log("selectNextNot");
+   			}
    		}
+   	
+   		resolveDisLocFilesFunc(event);
 
 	};// @lock
 
@@ -32,9 +48,12 @@ WAF.onAfterInit = function onAfterInit() {// @lock
    		sources.fichiersDistants.resolveSource({
    			onSuccess : function any() {
 				$$('pagesRestantes').setValue(sources.fichiersDistants.length + ' pages restantes');
+				
 			}
 		});
-	
+
+		
+			
 	}
 	
 	
@@ -52,7 +71,13 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 		resolveDisLocFilesFunc(event);
 	};// @lock
 	
+
+	
+	
 	resolveDisLocFilesFunc(event);
+	
+	$$('nbrPagesBtm').setValue(sources.fichiersDistants.length + sources.fichiersLocaux.length);
+				$$('nbrPagesTop').setValue(sources.fichiersDistants.length);
 
 // @region eventManager// @startlock
 	WAF.addListener("downloadAllBtn", "click", downloadAllBtn.click, "WAF");
