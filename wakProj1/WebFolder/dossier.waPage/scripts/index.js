@@ -2,12 +2,39 @@
 WAF.onAfterInit = function onAfterInit() {// @lock
 
 // @region namespaceDeclaration// @startlock
+	var saveDossier = {};	// @button
 	var downloadAllBtn = {};	// @button
 	var downloadArrowBtn = {};	// @button
 	var uploadArrowBtn = {};	// @button
 // @endregion// @endlock
 
 // eventHandlers// @lock
+
+
+	var sessEditDossierID = sessionStorage.DossierID;
+	if(sessEditDossierID == 'null'){
+		window.location.href = '/index.waPage/index.html';
+	}
+	
+	sessionStorage.DossierID = null;
+	
+
+	ds.Dossier.getEntity(sessEditDossierID,{
+	     onSuccess:function(event){
+	         var a = event.entity;
+	         sources.dossier.setCurrentEntity(a);  
+	         var pos = sources.dossier.getPosition();
+	         },
+	     onError:function(event){
+	    }}
+     );
+     
+     
+	saveDossier.click = function saveDossier_click (event)// @startlock
+	{// @endlock
+		sources.dossier.save();
+	};// @lock
+
 
 	downloadAllBtn.click = function downloadAllBtn_click (event)// @startlock
 	{// @endlock
@@ -38,22 +65,40 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 	};// @lock
 
 
-	function resolveDisLocFilesFunc(event){
-   		sources.fichiersLocaux.resolveSource({
-   			onSuccess : function any() {
-				$$('pagesRecus').setValue(sources.fichiersLocaux.length + ' pages');
-			}
-		});
-	
-   		sources.fichiersDistants.resolveSource({
-   			onSuccess : function any() {
-				$$('pagesRestantes').setValue(sources.fichiersDistants.length + ' pages restantes');
-				
-			}
-		});
-
-		
+	function resolveDisLocFilesFunc(event, frst_shot){
 			
+		sources.fichiersDistants.query("dossier.ID = "+ sessEditDossierID +" AND distant = true", {
+			 onSuccess:function(event){
+		         $$('pagesRestantes').setValue(sources.fichiersDistants.length + ' pages restantes');
+	         },
+	    	onError:function(event){
+	    	}
+	    });  
+
+
+		sources.fichiersLocaux.query("dossier.ID = "+ sessEditDossierID +" AND distant = false", {
+			 onSuccess:function(event){
+		         $$('pagesRecus').setValue(sources.fichiersLocaux.length + ' pages');
+	         },
+	    	onError:function(event){
+	    	}
+	    });  
+        		
+			
+		if(frst_shot == 'frst_shot'){
+			
+			sources.fichier.query("dossier.ID = "+ sessEditDossierID, {
+				 onSuccess:function(event){
+			         $$('nbrPagesTop').setValue(sources.fichier.length);
+			         $$('nbrPagesBtm').setValue(sources.fichier.length);
+		         },
+		    	onError:function(event){
+		    	}
+		    });  
+	
+	    }
+		         
+		         
 	}
 	
 	
@@ -74,12 +119,15 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 
 	
 	
-	resolveDisLocFilesFunc(event);
+	resolveDisLocFilesFunc(event, 'frst_shot');
 	
 	$$('nbrPagesBtm').setValue(sources.fichiersDistants.length + sources.fichiersLocaux.length);
 				$$('nbrPagesTop').setValue(sources.fichiersDistants.length);
+				
+				$$('nbrPagesErrors').setValue(sessEditDossierID);
 
 // @region eventManager// @startlock
+	WAF.addListener("saveDossier", "click", saveDossier.click, "WAF");
 	WAF.addListener("downloadAllBtn", "click", downloadAllBtn.click, "WAF");
 	WAF.addListener("downloadArrowBtn", "click", downloadArrowBtn.click, "WAF");
 	WAF.addListener("uploadArrowBtn", "click", uploadArrowBtn.click, "WAF");
