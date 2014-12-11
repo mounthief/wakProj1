@@ -14,7 +14,7 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 	{// @endlock
 		var liveSearchQry = $$("bttmSearch").getValue();
 		if(liveSearchQry.length > 0){
-			sources.dossier.query('ID = :1', { params: [liveSearchQry + "*"]});
+			sources.dossier.query('numop = :1', { params: [liveSearchQry + "*"]});
 		} else {
 			sources.dossier.query('ID > :1', { params: [liveSearchQry + "*"]});
 		}

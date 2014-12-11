@@ -33,6 +33,7 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 	saveDossier.click = function saveDossier_click (event)// @startlock
 	{// @endlock
 		sources.dossier.save();
+		window.location.href = '/index.waPage/index.html';
 	};// @lock
 
 
