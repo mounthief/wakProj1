@@ -48,7 +48,7 @@ WAF.onAfterInit = function onAfterInit() {// @lock
    			
    			 sources.fichiersDistants.getValues({
    			 	onSuccess : function(event){
-   			 		console.log("GetValz");
+   			 		//console.log("GetValz");
    			 		
    			 	}
    			 });
