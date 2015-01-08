@@ -2,13 +2,31 @@
 WAF.onAfterInit = function onAfterInit() {// @lock
 
 // @region namespaceDeclaration// @startlock
+	var add = {};	// @button
+	var okBtnSupprDossier = {};	// @button
+	var cancelBtnSupprDossier = {};	// @button
 	var bttmSearch = {};	// @textField
 	var remove = {};	// @button
-	var add = {};	// @button
 	var dataGrid2 = {};	// @dataGrid
 // @endregion// @endlock
 
 // eventHandlers// @lock
+
+	add.click = function add_click (event)// @startlock
+	{// @endlock
+		// Add your code here
+	};// @lock
+
+	okBtnSupprDossier.click = function okBtnSupprDossier_click (event)// @startlock
+	{// @endlock
+		sources.dossier.remove();
+		$$('dossierSupressConfirm').closeDialog(); //ok button
+	};// @lock
+
+	cancelBtnSupprDossier.click = function cancelBtnSupprDossier_click (event)// @startlock
+	{// @endlock
+		$$('dossierSupressConfirm').closeDialog(); //cancel button
+	};// @lock
 
 	bttmSearch.keyup = function bttmSearch_keyup (event)// @startlock
 	{// @endlock
@@ -22,23 +40,7 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 
 	remove.click = function remove_click (event)// @startlock
 	{// @endlock
-		var r = confirm("Voulez-vous vraiment supprimer le dossier N°"+sources.dossier.ID+" ?");
-		if(r == true){
-			sources.dossier.remove();
-		}
-	};// @lock
-
-	add.click = function add_click (event)// @startlock
-	{// @endlock
-		
-		sources.dossier.newEntity();
-		sources.dossier.date_envoi = new Date();
-		sources.dossier.save({onSuccess:function(event)
-        {
-            sources.dossier.addEntity(sources.dossier.getCurrentElement());
-            redirectDossier(event);
-        } });
-        
+		$$('dossierSupressConfirm').displayDialog();
 	};// @lock
 
 	dataGrid2.onRowDblClick = function dataGrid2_onRowDblClick (event)// @startlock
@@ -53,9 +55,11 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 	}
 
 // @region eventManager// @startlock
+	WAF.addListener("add", "click", add.click, "WAF");
+	WAF.addListener("okBtnSupprDossier", "click", okBtnSupprDossier.click, "WAF");
+	WAF.addListener("cancelBtnSupprDossier", "click", cancelBtnSupprDossier.click, "WAF");
 	WAF.addListener("bttmSearch", "keyup", bttmSearch.keyup, "WAF");
 	WAF.addListener("remove", "click", remove.click, "WAF");
-	WAF.addListener("add", "click", add.click, "WAF");
 	WAF.addListener("dataGrid2", "onRowDblClick", dataGrid2.onRowDblClick, "WAF");
 // @endregion
 };// @endlock

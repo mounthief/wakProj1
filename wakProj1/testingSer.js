@@ -1,0 +1,1 @@
+﻿//var testLax = ds.Dossier.query('ID=1');ds.EmployeAgence.query("agence.ID = :1","2",	{		onSuccess:function(event){			event.result;		}	});//testLax;

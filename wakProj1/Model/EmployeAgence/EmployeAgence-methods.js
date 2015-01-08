@@ -1,0 +1,1 @@
+﻿model.EmployeAgence.entityMethods.method1 = function(event) {	return event;};

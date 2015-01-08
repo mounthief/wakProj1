@@ -2,6 +2,8 @@
 WAF.onAfterInit = function onAfterInit() {// @lock
 
 // @region namespaceDeclaration// @startlock
+	var dataGrid2 = {};	// @dataGrid
+	var dataGrid1 = {};	// @dataGrid
 	var saveDossier = {};	// @button
 	var downloadAllBtn = {};	// @button
 	var downloadArrowBtn = {};	// @button
@@ -11,12 +13,54 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 // eventHandlers// @lock
 
 
+
+
+	
+		 
+	dataGrid2.onRowDraw = function dataGrid2_onRowDraw (event)// @startlock
+	{// @endlock
+	     	     
+	     if(event.row.cells[0].value){
+			var pEvent = event;
+			var tEmployeID = pEvent.row.cells[0].value;
+			
+			ds.DossiersEmployesAgence.query("dossier.ID = :1 AND employe.ID = :2",sessEditDossierID,tEmployeID,
+			{
+				onSuccess:function(event){
+					var reCol = '';
+					if(event.result.length > 0){
+						reCol = 'checked="checked"';
+					}
+					pEvent.row.cells[0].dom.html('<input type="checkbox" name="employe_affected_'+tEmployeID+'" '+reCol+' value="" id="employe_affected_'+tEmployeID+'" />');
+					
+					
+
+				}
+			});
+			
+		}
+	};// @lock
+	
+
+	dataGrid1.onRowDraw = function dataGrid1_onRowDraw (event)// @startlock
+	{// @endlock
+		if(event.row.cells[1].value){
+			var supprRemarqueButton = '<button class="btn_suppr_Rem" id="supprRem_'+event.row.cells[1].value+'" onclick="supprRem();">Suppr.</button>';
+			event.row.cells[2].dom.html(supprRemarqueButton);
+		}
+	};// @lock
+
+
+	function supprRem(){
+				console.log("tesx");
+	}
+
 	var sessEditDossierID = sessionStorage.DossierID;
 	if(sessEditDossierID == 'null'){
 		window.location.href = '/index.waPage/index.html';
 	}
 	
-	sessionStorage.DossierID = null;
+	//sessionStorage.DossierID = null;
 	
 
 	ds.Dossier.getEntity(sessEditDossierID,{
@@ -128,6 +172,8 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 				$$('nbrPagesErrors').setValue(sessEditDossierID);
 
 // @region eventManager// @startlock
+	WAF.addListener("dataGrid2", "onRowDraw", dataGrid2.onRowDraw, "WAF");
+	WAF.addListener("dataGrid1", "onRowDraw", dataGrid1.onRowDraw, "WAF");
 	WAF.addListener("saveDossier", "click", saveDossier.click, "WAF");
 	WAF.addListener("downloadAllBtn", "click", downloadAllBtn.click, "WAF");
 	WAF.addListener("downloadArrowBtn", "click", downloadArrowBtn.click, "WAF");
